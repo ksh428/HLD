@@ -1,0 +1,16 @@
+Data management in distributed systems:
+1. Shared db for all the systems
+2. Indiv db for each system.
+
+2 has advantages over the first but there are few challenges in implementing it.
+
+Suppose a txn comes which involves updating db1, db 2 and db3, then how do you maintain ACID properties?
+
+SAGA Design pattern helps in this
+
+Pre requisite for this:
+Each service should be able to query only its particular db not any other db of any other service. If it needs to
+query other service db , then it makes API call.
+
+SAGA: (sequence of local transactions)
+
