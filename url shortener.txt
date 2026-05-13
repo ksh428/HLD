@@ -1,0 +1,49 @@
+functional requirements:
+
+1. shorten a long url
+2. redirect to the original url from the short url
+3. Optional: have custom short url
+4. Optional: set expiration time on url
+
+Non functional requirements
+1. The system  should have low latency on redirects (~200ms)
+2. Support 100M DAU and 1B URL's
+3. ensure uniqueness of the urls
+4. High availablity and eventual consistency
+
+Core entities:
+1. original url
+2. short url
+3. User
+
+API:
+
+// shorten url
+POST /urls  
+body:
+{
+    original url,
+    alias?,
+    expirationtime?
+}
+
+//redirect API
+
+GET/shorturl -> redirect to originla url
+
+HLD:
+
+There are two main types of HTTP redirects that we could use for this purpose:
+301 (Permanent Redirect): This indicates that the resource has been permanently moved to the target URL. Browsers typically cache this response, meaning subsequent requests for the same short URL might go directly to the long URL, bypassing our server.
+The response back to the client looks like this:
+HTTP/1.1 301 Moved Permanently
+Location: https://www.original-long-url.com
+302 (Found): This indicates that the resource is temporarily located at a different URL. Browsers do not cache this response, ensuring that future requests for the short URL will always go through our server first.
+The response back to the client looks like this:
+HTTP/1.1 302 Found
+Location: https://www.original-long-url.com
+In either case, the user's browser (the client) will automatically follow the redirect to the original long URL and users will never even know that a redirect happened.
+For a URL shortener, a 302 redirect is often preferred because:
+It gives us more control over the redirection process, allowing us to update or expire links as needed.
+It prevents browsers from caching the redirect, which could cause issues if we need to change or delete the short URL in the future.
+It allows us to track click statistics for each short URL (even though this is out of scope for this design).

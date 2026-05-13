@@ -1,0 +1,15 @@
+Steps:
+
+1. Gather requirements : functional and non functional and capacity estimation (5-10mins)
+a. functional requirements:  core functions of the system, like the user should be able to etc...
+b. non-functional req: qualities of a system important to the user experience, like the system should be hihgly available
+, scalable, should support 10M+ DAU etc. Should my system support C/A, P is given in a distributed system.
+c. capacity estimation: you can skip this and do this only if it affects your design choices.
+
+[Restrict the functional requirements to top 3 max important ones]
+
+2. Core Entities (~2 minutes)
+3. API or System Interface (~5 minutes) : REST/GRAPHQL/RPC (most of the time default to REST)
+4. [Optional] Data Flow (~5 minutes):  high level sequence of actions or processes that the system performs on the inputs to produce the desired outputs
+5. High Level Design (~10-15 minutes)
+6. Deep Dives (~10 minutes)
