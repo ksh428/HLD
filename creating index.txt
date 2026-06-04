@@ -1,0 +1,15 @@
+SQL:
+
+CREATE INDEX index_name
+ON table_name(column_name);
+
+KQL:
+Indexing is automatic whenever data is ingested into the db
+
+What all should you know for hld interview:
+1. What and why
+2. read write tradeoff
+3. basci intutuion of B/B+ trees and how indexes are stored in leaves
+4. composite vs non composite , when to use
+5. clustered vs non clustered index, when to use
+6. basci way to create indexes in SQL

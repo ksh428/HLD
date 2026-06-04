@@ -13,3 +13,6 @@ c. capacity estimation: you can skip this and do this only if it affects your de
 4. [Optional] Data Flow (~5 minutes):  high level sequence of actions or processes that the system performs on the inputs to produce the desired outputs
 5. High Level Design (~10-15 minutes)
 6. Deep Dives (~10 minutes)
+
+
+https://excalidraw.com/#json=qKJoV5BYxUqBWRq0unLAD,Zp8KVG0egxQ_chDQt7F02g

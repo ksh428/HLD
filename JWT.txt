@@ -1,0 +1,56 @@
+what to know for HLD  interviews:
+
+1. What?
+2. Usage: Auth, autho, sso
+3. Structure
+4. statelessness:
+
+Flow:
+
+    User logs in
+    Auth service validates credentials
+    Server generates JWT
+    Client stores JWT
+    Client sends token in every request
+    Backend verifies signature
+    No DB lookup needed for session
+
+5. Adv over session based Auth
+6. Basics about claim types, public claims,private claims, custom claims
+7. Signing (reject always unsigned JWTs)
+    why assymteric signing is preffered:
+
+    Symmetric
+
+    Example:
+
+    HS256
+
+    Same secret:
+
+    sign
+    verify
+
+    Problem:
+
+    every service needs secret
+    Asymmetric
+
+    Example:
+
+    RS256
+
+    Private key:
+
+    signs token
+
+    Public key:
+
+    verifies token
+
+    Better for:
+
+    microservices
+    distributed systems
+
+8. Problems
