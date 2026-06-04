@@ -1,0 +1,9 @@
+When to use blob storage:
+
+1. Dealing with huge amount of unstructured data like images, videos etc.
+2. You upload data to a blob and get back a url,you can use this url later to download the data
+3. They often work in conjunction with CDNs to enable faster downloads.
+4. In a typical setup you will have a core database like Postgres or DynamoDB that has pointers (just a url) to the blobs stored in S3.
+5. Adv: they are highly durable and highly scalable, cost efffective
+
+Ex: Amazon S3, Azure blob etc.

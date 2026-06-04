@@ -1,0 +1,30 @@
+When you need full text search in a huge amount of data.
+
+Traditional SQL:
+SELECT * FROM documents WHERE document_text LIKE '%search_term%'
+
+This is highly inefficient.
+
+Search optimized databases, on the other hand, are specifically designed
+to handle full-text search. They use techniques like indexing, tokenization,
+and stemming to make search queries fast and efficient.
+They build inverted indexes: mapping of all the documents where a word has occurred:
+WORD1:{DOC1,DOC2..}
+WORD2:{DOC3,DOC1..}
+
+Things you should know about search optimized databases
+Inverted Indexes: as mentioned above.
+Tokenization: Tokenization is the process of breaking a piece of text into individual words.
+ This allows you to map from words to documents in the inverted index.
+Stemming: Stemming is the process of reducing words to their root form. This allows you to
+ match different forms of the same word. For example, "running" and "runs" would both be reduced to "run".
+Fuzzy Search: Fuzzy search is the ability to find results that are similar to a given search term.
+ Most search optimized databases support fuzzy search out of the box as a configuration option.
+  In short, this works by using algorithms that can tolerate slight misspellings or variations in the search term.
+   This is achieved through techniques like edit distance calculation, which measures how many letters need to be changed, added, or removed to transform one word into another.
+Scaling: Just like traditional databases, search optimized databases scale by adding more nodes to a 
+ cluster and sharding data across those nodes.
+
+ Ex: ElasticSearch.
+
+ 
