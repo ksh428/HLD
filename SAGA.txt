@@ -1,0 +1,14 @@
+SAGA DESIGN pattern is used for migration from monolith to microservices
+ It mainly solves acid properties for a distributed non shared db system: each micro svc has its own db and the contract is
+each svc can directly call only its own db, but if it needs some other db, it will make an api call to the respectives 
+microservice and get the value instead of calling its db.
+
+[SAGA Type: CHOROEGRAPHY]
+It works on events, each serivce send out a success or failed event to a queue and the dependent service listens on that 
+particular event, and performs roll forward or roll back based on that
+
+[SAGE Type: ORCHESTRATOR]
+There is a central component called orchestrator which calls each svc and looks for its result,if it succeeds it calls the next svc else rolls back
+as appropriate.
+
+

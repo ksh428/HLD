@@ -1,0 +1,18 @@
+Notes in ipdad
+
+IMP:
+
+All reverse proxies can act as Load balancer but not vice versa. It depends on the configuration
+of the LB.
+
+Type 1:
+LB configured with SNAT(L7)
+this will terminate the existing connection and create a new connection with its
+own ip to the backend-> hence acts as rev proxy
+Ex: Nginx
+
+LB confiured as by pass (L4/DSR)
+just routes the traffic to the backend without altrering ip -> hence not rev proxy
+Ex: Azure SLB
+But Azure App Gateway -> acts as reverse proxy.
+
