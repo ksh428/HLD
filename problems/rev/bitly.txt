@@ -1,0 +1,36 @@
+Functional requirements:
+
+1. user should be able to create a short url from a long url
+1.1 support expiration time for short url
+1.2 support custom alias
+
+2. user should be redirected to the original url from the short url 
+
+Non-functional requirements:
+1. low latency on redirects (~200ms)
+2. supprot 100M DAU and 1B urls
+3. each url should be unique 
+4. High availability (strong consistency is not required: eventual consistency is enough)
+
+
+Entities:
+1. Original url 
+2. short url 
+3. user 
+
+API:
+
+POST /Urls -> return shorturl
+{
+    originalurl,
+    alias,
+    exp time 
+}
+
+GET /shorturl -> original url 
+
+-> return to the client with 302 redirect (temporary) : meaning that automatically redirect to this link
+
+301 is a permanent redirect , the browser caches this url and skips our server entirely the next time this link is requested
+
+

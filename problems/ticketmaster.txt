@@ -1,0 +1,58 @@
+Functional requirements:
+1. Book tickets
+2. View events
+3. Search events 
+
+Non functional requirements:
+1. CAP: consistency >> availability
+(better: strong consistency in booking tickets and high availability in search and view events)
+2. scalablity to handle event surges
+
+
+core entities:
+1. event
+2. venue
+3. performer 
+4. tickets
+
+API:
+
+GET /events/eventid  -> event,venue, tickets{}
+body: event name, timestamp
+
+GET /search?location={loc}&name={name}.... -> partial event[]   (just to show some details)
+
+POST/booking/reserve
+header: JWT token (user and session details)
+body: {ticketid}
+
+POST/booking/confirm
+header: JWT token (user and session details)
+body: {ticketid,paymentdetails..}
+
+
+Distributed locking :
+this is done using redis (ticketid, ttl)
+this will make sure that after ttl mins, this entry is removed from the cache, if the user couldnt
+complete the payment 
+
+How will the query work? The client gets the list of all the available tickets from the db and gets 
+the list from the cache (reserved)
+return set1 - set2 
+
+deep dive:
+the optimization which can be done is in search. Using normal Database is slower 
+Use search optimized database 
+Don't use Elasticserach as your primary db.
+
+
+Now there are 2 ways to keep data b/w elasticsearch db and primary db consistent:
+1. CRUD service takes care of it 
+2. The 2nd option is CDC, changed data capture , changed events is put into a stream from where elasticsearch consumes
+
+For very popular events:
+a virtual waiting queue can be introduced to track the very large demand, this will be an event driven architecture
+
+
+https://excalidraw.com/#json=_4yuurqgzC3lhUFsHGnoS,X8urOewmBSJF9-n9oAwI9Q
+

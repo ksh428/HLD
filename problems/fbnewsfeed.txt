@@ -1,0 +1,108 @@
+
+requirements (func and non func), core entities, api design, data flow ,hld, deep dive 
+
+question: This system should be able to allow users to create posts, follow other users, and display
+the posts of the followed users in the feed. It should support queries like: get no of likes on a post,
+get comments on a post, get list of followers of a uid and list of followees of a userid 
+
+
+functional requirements:
+
+1. create posts
+2. follow users 
+3. view feed  (page thrpugh feed  ie pagination support)
+4. like and commeent on post 
+
+
+ASSUME the users are already authenticated and their creds are stored in JWT
+
+non functional requirements :
+1. CAP: high feed view availability, follow availabilitly, eventual consistency on  view posts
+2. 500ms latency for posting and viewing
+3. 2B DAU  
+
+core entities:
+
+User 
+Post 
+Likes 
+Comments 
+Follows 
+Activity table
+
+User: uid....
+Post: pid,uid,...
+Likes: lid, uid, type (like on a post/comment)
+Comments: cid,uid,pid ...
+Follows:  followeeid,followerid
+
+    Get list of followers of uid : select * from Follows where fikkiweeid=uid 
+    and similarly for the other query 
+
+Activity table : usefulf for effictevely giving number of likes / comments on a table 
+
+Activity: par_id (post id/ comment id), like
+
+You can make a similar table for getting comments 
+
+API:
+
+create post :
+
+ POST /posts 
+ {
+    body: contents
+ }
+
+ following a user 
+ PATCH /users/id/followers
+ {
+
+ }
+
+ view feed using pagination 
+ GET/feed?pagesize={}&cursor={}
+ ->    {
+    posts[],
+    nextcursor
+ }
+
+ Like a post 
+ POST /posts/postid/likes 
+
+ Comment on a post 
+ POST /posts/postid/comments
+
+ cursor can be starttimestamp, the response returns the next timestamp which can be queried again To
+ get the next pages 
+
+ User feed generation:
+ we can pre compute the user feed for a user and store it in cache.
+ The post service will notify the user feed service to update the user feed for all the followers of the
+ user who posted with the new post [Fan out write].
+ The other way is instead of notifying , push the posts to a single post queue. there will be a group of async workers which will pull the posts from the 
+ queue ,and create the user feed as appropriate. This can be part of the feed service.
+
+
+
+
+ WHEN A CELEBRITY POSTS something:
+ The issues are: updating huge number of user feeds and sending out the notification to huge number of followers 
+
+FOR WRITE RESPONSE TO THE CLIENTS:
+ 1. 1 options is to do this in batch of users .
+ 2. use a pull based model. for normal users, the feed data is pushed to all the followers of the poster.
+ but when a celeb posts something, the client pulls in the feed data, both of this can be done via 
+ Websockets/ SSE.
+
+ FOR CREATING THE FEED:
+we can skip the feed creation for these accounts, the feed for the other accounts will be created into the cache by the async workers,
+whenever we need to display the post of a celebrity in the feed, we create it at runtime and merge it with the already created feed and return to the user.
+
+
+
+ https://excalidraw.com/#json=k1FSwRVlqtjyBwIFwPOMR,nPsjVzzfL5JgN3_N8rInLw
+
+
+
+

@@ -54,3 +54,20 @@ Flow:
     distributed systems
 
 8. Problems
+
+
+WHEN IT IS USED:
+JWT is just a token format containing useful information for authorization
+
+usually when you would want to authorize yourself you will pass the jwt token generated in the
+authentiation step and the server know that  you are authenticated and sees the expiry time,claims etc 
+
+
+Before jwt, session based auth was popular, but it needed db based lookup which was not ideal
+
+jwt is stateless and doesn't require db 
+
+This is passed in the authorization header in the bearer token of  a GET request
+
+JWT is not encrypted by default, its just signed and encoded (using payload and claims)
+so JWE is used nowadays

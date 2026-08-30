@@ -1,0 +1,48 @@
+// DESIGN GOOGLE CLOUD/DROPBOX
+
+Functional requirements:
+1. Upload files
+2. download files
+3. sync files 
+
+
+Non functional requirements:
+1. CAP : A and P
+2. low latency up and down 
+3. supports large files and resumable uploads 
+4. high data integrity
+
+
+Core entities:
+1. File 
+2. File metadata
+3. Users
+
+API
+
+POST /uploadfiles
+body: file and file metadata
+
+GET /files/fileid -> file and file metadata 
+
+GET/changes?timestamp.. -> {fileIDs/bloburls}
+
+Challenges with the initial design:
+1. LB/ API gw endpoints doesn't support large amt of data entry, so having the post request with
+the file data is not possible.
+
+2. Better way is to upload directly to the blob storage using presigned urls. 
+the upload files api only has the file metadata and requests the blob store for a pre-signed url , and returns it to the client
+
+resumable downloads:
+chunk the files into smaller chunks and send those to blob and update the completed chunks in the file metadata db (using blob notifications)
+best way to identify the chhunks is fingerprinting (hash of the chunk contents)
+
+
+Sync the changes:
+1. client periodically polls the server for changes 
+2. to increase spped of download, use delta sync checks for chunks, and download/upload only those 
+
+
+https://excalidraw.com/#json=w5Hv7LGkaMUS_DiFF7CoO,fniS1sIMqtL-E-nhHa_3gA
+

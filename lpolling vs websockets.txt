@@ -1,0 +1,21 @@
+All of these are used for real time communication b/w server and client
+
+Polling: short and long polling :
+
+short:
+server immediately sends back the response irrespective of whether the data is there or not .
+
+
+long:
+server holds the connection until data is available to be sent to the client, then it sends the data
+and closes the connection .
+
+Websockets:
+1. persistent duplex communication.
+
+cons:
+difficult to scale, vertical scaling is the better option
+
+Server sent events: (1D connection)
+server can send data to the client in the same single open long lived connection but the client cannot send.
+

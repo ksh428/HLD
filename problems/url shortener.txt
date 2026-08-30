@@ -47,3 +47,32 @@ For a URL shortener, a 302 redirect is often preferred because:
 It gives us more control over the redirection process, allowing us to update or expire links as needed.
 It prevents browsers from caching the redirect, which could cause issues if we need to change or delete the short URL in the future.
 It allows us to track click statistics for each short URL (even though this is out of scope for this design).
+
+
+Design :
+
+if length is 7 and Tot url: 1B: 36^7 >1B , base 36 is enough but we often use base 62 based encoding > 350B
+
+2 options to generate the short link:
+Hash (long url)- > base 62 encode -> slice first 6/7
+
+Generate randome no (1-100B)- > base 62 encode it -> take first 6/7 .
+
+To prevent collision on either of these have a db lookup before creating
+
+
+To avoid db lookup: use counter -> b 62 encoding (no collision)
+-> predictable: less secure 
+
+
+Scaling:
+
+100M req/day : 10^8 /10^5 : 10^3 req/sec : hotpath 10^5 req/sec 
+
+if server can handle 10^2 : we need 10^3 server
+
+Memory: per row :500bytes 
+10B rows : 5TB 
+
+HLD:
+https://excalidraw.com/#json=d-DuDc4UvZk95QTvYU_-h,3aP9g3FteF9T70pa-jaKEg

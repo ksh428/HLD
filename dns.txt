@@ -1,0 +1,57 @@
+www.google.com. 
+Subdomain -> www
+Second level domain -> google
+Top level domain -> com
+root .
+
+FQDN -> FULL
+
+CNAME: alias for a different Subdomain
+how will it be used: suppose you want to direct shop.mywebsite.com traffc to amazon.com 
+you can configure a cname for shop.mywebsite.com as amazon.com , so dns lok up will take you
+to amazon.com even though you trigger shop.mywebsite.com 
+
+A record: maps reord to ip 
+
+Example:
+
+ rr1---sn-ci5gup-pmcs.googlevideo.com
+    ----------------------------------------
+    Record Name . . . . . : rr1---sn-ci5gup-pmcs.googlevideo.com
+    Record Type . . . . . : 5
+    Time To Live  . . . . : 387
+    Data Length . . . . . : 8
+    Section . . . . . . . : Answer
+    CNAME Record  . . . . : rr1.sn-ci5gup-pmcs.googlevideo.com
+
+
+    Record Name . . . . . : rr1.sn-ci5gup-pmcs.googlevideo.com
+    Record Type . . . . . : 1
+    Time To Live  . . . . : 387
+    Data Length . . . . . : 4
+    Section . . . . . . . : Answer
+    A (Host) Record . . . : 116.119.211.204
+
+step 1: you did a dns lookup for rr1---sn-ci5gup-pmcs.googlevideo.com
+step 2: dns server replies that this is a cname/alias for rr1.sn-ci5gup-pmcs.googlevideo.com
+step 3: do a dns lookup for rr1.sn-ci5gup-pmcs.googlevideo.com
+step 4: you get the A record for rr1.sn-ci5gup-pmcs.googlevideo.com
+
+sometimes you will find AAA (ipv6 server address)
+
+DNS RECURSIVE Flow:
+Browser
+    ↓
+OS DNS Cache
+    ↓
+Local DNS Resolver (ISP/Public DNS)
+    ↓
+Root DNS Server
+    ↓
+TLD Server (.com)
+    ↓
+Authoritative DNS Server
+    ↓
+IP Address
+    ↓
+Browser connects to server

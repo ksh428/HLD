@@ -1,0 +1,19 @@
+TBD:
+
+
+
+DONE:
+consistent hashing-> why and how
+microservice design patterns-> saga and strangler
+proxy-> l4/7 rev/forward
+distrubuted caching:
+what (server ->client), caching strategies (read and write)
+load balancer and algos
+oauth
+indexes
+n/w protocols
+sql vs no sql
+https and ssl
+cryptography
+dns 
+jwt

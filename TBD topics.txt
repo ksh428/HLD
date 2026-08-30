@@ -1,0 +1,4 @@
+1. understand the diff between partitioning, sharding and indexing better and when to use each 
+2. primary key, secondary key and partition key 
+3. ACID properties in detail 
+

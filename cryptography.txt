@@ -1,0 +1,31 @@
+| Technique  | Reversible | Secret Key | Purpose             |
+| ---------- | ---------- | ---------- | ------------------- |
+| Encryption | ✅ Yes      | Yes        | Confidentiality     |
+| Hashing    | ❌ No       | No         | Integrity           |
+| Encoding   | ✅ Yes      | No         | Data representation |
+
+IMPORTANT:
+
+How would Asymmetric encryption work b/w clinet and server?
+
+Server has a pair of public and private keys
+client initiates a TLS connetion with the server, and in return the server returns the ssl cert
+which contains the public key
+now the client uses the public key to encrypt the data and sed it out to the server, the server
+derypts the data using its private key
+The disadv of this methos is this is slower and computationally heavy
+
+The Hybrid apprach:
+TLS handhake is made using assymetric encryption
+Now the client generates a session key and encrypts it using the public key and sends to the server
+ which decrypts it with the private key, [Diffie hellman]
+ Now data ommunication occurs using this session key -> symetric encyption -> faster
+
+
+Digital signatures:
+provides data Integrity and autentication [compare hashes]
+
+
+Diff b/w signature and encryption:
+Public key enrypts and private key decrypts
+private key signs and public key verifies
