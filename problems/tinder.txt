@@ -1,0 +1,69 @@
+Functional requirements:
+1. users can filter profiles based on age,gender, distance etc.
+2. view the set of profiles after fltering.
+3. users can like/pass a profile 
+4. 2 users swipe right on each other -> match -> open chat 
+
+[avoid showing profiles multiple times ]
+
+Scale: 10M DAU 
+
+Non functional requirements:
+1. CAP: high consistency for the swipes 
+2. low latency stack/feed loading (<300ms)
+3. Scale to handle high write throughput (10M*100 )
+
+core entities:
+Profile 
+Swipe
+Match 
+
+API: [write only the user facing apis]
+
+POST /profiles 
+{
+    pref.. list 
+}
+
+
+GET /stacks?lat&long -> gives the feed profiles[]
+Headers: JWT to auth user 
+
+POST /swipes/userid   -> who am i swipping
+{
+    decision:..
+}
+
+HLD:
+It makes sense to have a separate svc for swipe and profiles as the traffic on the swipe api will be much more 
+and so having 2 msvc will enable to scale it efficiently 
+
+
+10M DAU
+
+10M* 100 =1B requests /day 
+
+1B/ 100k= 10^9/10^5  -> 10K swipes/sec 
+
+Postgres can handle it, but mention that cassandra is write optimised and can better handle it and cheap.
+But cassandra is eventually consistent.this is problem 
+if we want to support immediate push notification for matches, the db might not yet have the updated likes 
+
+The solution for this, running a cron job, to asynchronously notify the matches 
+[the persons are not aware of when the other person liked you]
+
+The other option is to use Redis cache for storing the keys : us1,us2 for likes.
+This ensures atomic operations and lookups
+
+For low latency feed:
+The existing approach of creating the feed-> first get the user pref from profile db, then query 
+the profile db again with the prefs and return them, specifically based on lat and long -> very time consuming
+
+To optimize this, use geo-spatial indexes
+
+The other option is using elasticsearch which also provides fast geo-spatial lookups.
+
+
+https://excalidraw.com/#json=Y9vDku8SzBjoAMg_gdLXV,ijTJ36q_glwFJ1yVD5xBvA
+
+

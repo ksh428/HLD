@@ -1,0 +1,77 @@
+functional Requirements:
+1. view list of problems 
+2. view a sp problem and code its solution 
+3. submit solution and get feedback
+4. support competitions and leaderboard
+
+non functional requirements:
+1. CAP: availability over conssitency.
+2. scale to support 100k users in competitions
+3. fresh/near realtime leaderboard 
+
+scale:
+1. 100K DAU (5M tot accounts)
+2. 3K probs 
+3. 100k competition
+
+
+Core entities:
+User
+Problem 
+Submission
+Competition
+
+API:
+
+GET /problems?difficulty={}&topic={} -> list of <partiaal problems[]>
+
+GET /problems/problemid
+
+POST /problems/problemid -> Submission
+{
+    code,
+    lang,
+    compid?
+}
+
+GET /problems/problemid/submissions/subid  -> returns submission result
+
+GET /leaderboard/competitionid?page={}..
+
+HLD:
+running the code in the primary server is a huge security concern
+
+We can end up running the code in a VM, but VM is heavy as it has its own OS..
+
+Better option is to run it in windows docker containers
+
+The 3rd options is to use some serverless on demand compute like AWS lamda or Azure Functions, these respond 
+to http/s requests by bringing up temporary compute, to run the code and return the response.
+
+To create the leaderboard, we will query the Submission table and its a heavy query 
+
+One option to handle this using Redis(cache). Query the  leaderboard and put it into the  cache ,
+for for 10s (TTL), query get query  for leaderboard goes into  the cache. After every 10s the cache is invalidated
+and a new query reforms it from the db.
+
+This will make cache miss every 10s. To handle this we can have a cron job run every 10s to refresh the cache,
+in this way there will be no cache misses.
+
+The other option is to avoid using the cron jobs . Use a redis cache with key: compid 
+and value as a sorted set of score(the value will contain the userid and sorted on score)
+
+Then flow:
+new submission -> passess/fail -> update the DB -> also update the cache by updating the score of the current userid
+
+To keep cache and db consistency, you can use CDC(changed data capture with message queues (kafka)) which captures an event stream of all the changes
+and pushes it to the message queue. 
+
+
+For near realtime leaderboard: just poll every 3s for the status, the engg overhead introduced by web sockets
+/ SSE is too much in this case 
+
+
+To handle submission surges, use a buffering using message queue and workers, once the submission is processed by the containers 
+the workers send it back to the primary server to update the db (AND cdc Tto update the cache)
+
+To nofiy aboout the submission result, the client constantly polls the submission endpoint
