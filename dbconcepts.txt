@@ -1,0 +1,4 @@
+Sharding:
+splitting db into multiple shards such that no single shard contains the entire data 
+what to shard by? Shard key 
+

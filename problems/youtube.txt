@@ -1,0 +1,44 @@
+Functional Requirements:
+1. Users should be able to upload videos
+2. watch/stream videos
+
+Scale:
+1M Uploads/day 
+100M DAU 
+Max video size: 256 GB
+
+Non func requirements:
+- AAvailability >> consistency. we are okay to delay showing new videos for some time 
+- support uploading and stream large videos (256 GB)
+- low latency streaming < 500ms.
+- should be scalable according to the above section.
+
+Core Entitites:
+1. Video
+2. Video Metadata 
+3. User 
+
+API:
+//upload
+POST /videos{
+    metadata [containing size]
+}
+
+//watch
+GET /vidoes/videoid -> video and video metadata
+
+HLD:
+
+4GB is the limit in case of Azure App Gateway
+Upload the video directly to AZ blob storage using presigned urls (the video service requests for these
+urls given the size of the file to be uploaded), use chunking and PUT BLOCK API (azure)
+
+Once the video is uploaded successfuly, the blob storage sends out a Blob created event , which can be processed
+by azure functions to update the db 
+
+Handling video playbaacks in lower resolutions:
+We can transcode the video for different bitrates/resolutions asynchronously and store them in  s360, so whenever a particular
+resolution is selected, we get from that particular array [Manifest file]
+
+
+https://excalidraw.com/#json=WnxTJCst_qASrxiSYPuA9,fQm4aZAm91Yd9rB99qMsGw

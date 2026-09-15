@@ -1,0 +1,6 @@
+Apache zookeeper:
+
+It is a centralised co-ordination service  used by large distributed systems to store configuration data,
+synchronize actions, and manage communication between different servers.
+
+It's just a key value store 

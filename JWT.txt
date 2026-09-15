@@ -71,3 +71,4 @@ This is passed in the authorization header in the bearer token of  a GET request
 
 JWT is not encrypted by default, its just signed and encoded (using payload and claims)
 so JWE is used nowadays
+

@@ -1,0 +1,41 @@
+Functional requirements:
+start groups chats 
+send/recieve messages (and media)
+view chat history
+access message  after offline
+
+Non functional requirements:
+messages delivered with low latency <500ms
+guaranteed delivery of messages 
+Billions of users, highh throughput
+Fault tolerant
+
+Core Entitites:
+User 
+chat
+messages
+client 
+
+DB:
+Dynamodb (or cosmosdb)
+
+API:
+we'll be using websockets over TCP
+ 
+
+HLD:
+the chat server will maintain a hashmap of the active open WS connections:
+client1:ws1, client2:ws2 ...
+
+For designing chat push when back online:
+use separate tables Messages and Inbox, inbox will contain the messages for each recipientid
+We can maintain per deviceid, a cursor of lasstacked successfully delivereed message.
+The client will request for the messages from the next cursor when back online.
+
+Write steps:
+Client asks for the corresponding chat server -> chat registry gives a server numer using  consistent hashing to the client 
+->connects to the specific server and writes to it (messages table and inbox table)
+
+
+
+https://excalidraw.com/#json=uQzFieFrSHJaRPtstB5E3,mUZ9FpM-5CF_3R9cUoFjvw

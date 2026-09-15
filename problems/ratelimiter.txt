@@ -1,0 +1,70 @@
+Functional Requirements:
+- identify users by id/ip/api key 
+- limit requests based on configurable rules 
+- return proper error codes 
+
+Scale:
+- 100M DAU
+- 1M rps
+
+Non func req:
+1. AVL> consistency . We would want the RL to be aval even with stale older confif is possible.
+2. Low latency rate limit checks (<10ms)
+3. scalable to 1M rps 
+
+Core Entities:
+-Request 
+-Client (ip,userid etc)
+-Rules
+
+System Interface (not API as this is internal not Client facing, client wont be calling this)
+
+isrequestAllowed(clientid,requirestid)-> {passes:bool, remaining:number,resettime:timestamp}
+
+HLD:
+Placing the rate limiter:
+1. Option is to place it directly inside the Gateway, and make it check that if we can even serve the
+request befre routing it to the msvc
+
+The clients can be identified by IP, userid/device id, api key 
+
+Algo:
+1. Fixed window [cons:boundary effect]
+2. Sliding window: will be implemented using heap and will need more memory req/ user 
+3. sliding window counter: just needs to have a counter of no of request in each window/user .
+now for the current window if we have got 6 request in 70% of thw window , we'll do:
+30%(prevcount)+curr_count_tillnow<=limit -> PASS/FAIL 
+
+4. Token Bucket
+
+We'll need to store the token state/user outside of the G/W as there will be multiple G/W's 
+
+Use a key value store like Redis for doing that . GET/SET on the redis key.
+
+Request comes in: G/W fetches the last fill time and token count for the user as well as refill rate 
+update the counts to redis and responds back to the client  
+
+ERROR CODES:
+HTTP 429: TOO MANY REQUESTS
+
+Return the following headers as follows:
+Rate limit ceiling, Number of requests left in current window, timestamp of reset of window
+
+
+Deep dives:
+Redis supports 100K op/sec.
+ so to support 1m rps, we need multiple redis instances: create multiple shards 
+
+ Shards will contain set of users: Use inbuilt redis clusters which will handle this .
+ It uses hash slots to handle distribution and correct routing.
+
+ What happens when a particular shard fails:
+ Fail open : allow all requests to the backend when the RL fails 
+ Fail close: block all requests to the backend when the RL fails.
+
+ Redis clusters supports the replicas to handle this .
+
+ For centralised dynamic configuration management use  Zookeper [store the rules locally into the g/W
+ and listen for changes from zookeper, whcih will push the changes.]
+
+ https://excalidraw.com/#json=rZgN6vwO47Yh8LngOUY_E,Lzn_3A8Kql7_lQGFdKGTsQ
