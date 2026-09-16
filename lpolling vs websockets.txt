@@ -17,5 +17,15 @@ cons:
 difficult to scale, vertical scaling is the better option
 
 Server sent events: (1D connection)
+This is over HTTP/S
 server can send data to the client in the same single open long lived connection but the client cannot send.
+
+Both websockets and SSE are persistent connections
+
+Cons of websockets:
+it  doesn't use HTTP, it uses its own protocol, although the initial step is to set up a HTTP
+connection, but then all the infra needs to upgrade to websocket 
+
+Load balancer, proxies, firewall all need to negotiate this upgrade. 
+
 

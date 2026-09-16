@@ -1,0 +1,34 @@
+Primary keys:
+
+Make the most common query colkumn as the partition key
+
+
+
+Partition key (for querying): unique identifier that determines items physical storage location using
+consistent hashing 
+Sort key: (optional: for sorting) secondary attribute that enables orderging and range queries within a partition
+
+Primary key: {partition key}:{sort key}
+
+
+Examples:
+system      partition key           sort key
+chat app    chat id                 message id (monotonically increasing)
+                                    we can't use timestamp, because chat id: timestamp might not 
+                                    be unique , hence not a pk, so we can maintain the msg id's in increasing order 
+
+e commerce  user id                 order id (mono increasing)
+
+
+Secondary Indexes:
+GSI (Global Secondary Index (for querying)) : secondary attribute to query other than partition key
+Local Secondary Index (for sorting): same partition key but different sort key for alternate sorting
+
+Architecture:
+There is a leader db in which the writes are done, and it asynchronously populates replicas in diff 
+AZ's .
+
+Dynamo db supports both eventual consistency (default) and strong consistency (with some limitations).
+
+Dynamodb streams -> similar to CDC for ddb. Message queues/ workers will take the changes and work on top of it .
+

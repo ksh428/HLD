@@ -1,0 +1,76 @@
+Functional requirements:
+1. viewers can post comments
+2. viewers can see  all the comments already posted in near realtime
+3. also prev posted comments should be shown in real time
+
+Non functional requirements:
+1. scale to millions of videos and 1000s of comments /sec 
+2. [CAP] availability > consistency fo comments section
+3. low latency comment braodcast [new comment comes in, it should show up on everybodys feed immediately ]
+
+Core entities:
+Comments 
+Live Video 
+User
+
+API:
+
+post comment:
+
+POST /comments/videoid
+{
+    comment body
+    ...
+}
+
+see all comments:
+
+GET /comments/videoid?cursor={last_comment_id}&direction={after|before}&pagesize=100
+
+use after for comments after joining, before for previous comments
+
+HLD:
+Suppose we want the user to scroll continuously, but 50 comments at a time, so instead of querying the 
+db for 50 comments every time, we can cache the 1000 comments for a user:video key
+
+Initial approach was to use polling, to get the comments/post them as well as for broadcast.
+
+This is not a efficient approach as latency is 2-5 s, depending on polling interval
+
+Redis:
+user:video -> comments[]
+
+Deep dives:
+
+We need to have a persistent connection : websockets/ sse 
+
+websockets : it might be an overkill in this case as most of the users will be readers and only 
+a small portion of the users will comment: so we can use the POST HTTP api for 
+creating comments and for realtime gGET we can use the websockets 
+
+So, we'll prefer SSE .
+
+The comment svc will maintain a mapping of each video: to list of connections (clients/device which are 
+watching this video).
+
+We can separate the comment posting service with the getting service as the scale of these 2 svcs 
+will be highly different.
+
+The client will make the SSE connection to the realtime comment svc, and this svc will be horizaontally 
+scaled to handle 1m videos .
+
+But the main challenge is when a comment is posted on a video through the comment service, which 
+instance of the realtime service to notify and update its in memory mapping and send to the 
+connected clients : for that use zookeeper to maintain mapping of which instance (ip),
+is serving a video.
+
+The comment service will cache the zookeper state, and subscribe for changes from it 
+
+If you want to avoid zookeeper, the other approach is to use pubsub, to broadcast to all the 
+instances of the real time service, the service has the ability to ignore/ accept this request 
+
+https://excalidraw.com/#json=jwEn9MoVruuOaKrNBVG6s,pNfbRH1aU9wKDx9xv2glkA
+
+
+
+

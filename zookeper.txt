@@ -4,3 +4,12 @@ It is a centralised co-ordination service  used by large distributed systems to 
 synchronize actions, and manage communication between different servers.
 
 It's just a key value store 
+
+
+Use when:
+1. Need to coordiante between differnet servers.
+2. Store server information with some other info specific to server in server config.:
+for example you can store what all connections (websockt/sse/http) a server holds,
+ and based on that a request can be routed to that particular server 
+3. Distributed locks — ensure only one server performs an operation.
+4. Service discovery — track available service instances.
