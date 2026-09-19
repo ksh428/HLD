@@ -1,0 +1,15 @@
+There are 2 types of tech for keeping/storing lat/long info efficiently
+1. Custom spatial tree : Quadtrees, BKD tree etc 
+2. Single lat/long encoded key: Geohashing,S2,H3 (Uber)
+
+Custom spatial tree:
+1. Expensive writes
+2. poor for rapidly changing data 
+3. great when there in uneven distribution/location
+4. Use when need shapes and exact geometry.
+
+Single lat/long encoded key:
+1. fast and cheap writes 
+2. Best for point data 
+3. Suffers from boundary artifacts: need more querying to get relevant data 
+4. Use when points at scale.

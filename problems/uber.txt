@@ -1,0 +1,103 @@
+Functional requirements:
+1. users should be able to input start and dst location and get price estimates 
+2. request a ride 
+3. drivers should be able to accept/deny the request and navigate to pickup/dropoff
+
+Non functional requirements:
+1. CAP: high consistency on matching and location tracking of driver, high availability on all other fronts
+2. low latency match (<1 min)
+3. handle surges in peak hours or events (100k rps searches/booking requests)
+
+
+Core entities:
+Ride 
+Driver 
+Rider
+Location 
+
+API:
+
+(request and create a ride)
+POST /ride/fareestimate  -> partial <Ride>
+{
+    startloc,
+    destloc
+}
+
+PATCH /ride/request 
+{
+    rideid
+}
+
+// update the driver locations
+
+POST /location/update
+{
+    lat,
+    long
+}
+
+PATCH /ride/driver/accept
+{
+    rideid,
+    decision?
+}
+
+PATCH /ride/driver/update  -> lat/long of the next location to dropoff
+{
+    rideid,
+    status
+}
+
+HLD:
+
+Ride svc is going to handle fare estimates.It will use a 3rd party mapping app like googlemaps or we can use a black box 
+denoting a ML model, to get estimates.
+It will also return the next lat/long of where the driver needs to go.
+
+driver client will call the location service every 5s to update theier locations in the location db.
+
+Ride matching svc will query this db, to get the relevant drivers for a current ride and the notification svc will send 
+the ride requests to them
+
+
+Deep dives:
+
+We need the lat/long based query for finding the proximate drivers to be efficient: we can use geospatialindexing for these 
+
+geospatialindexing in Postgres [quadtrees] in lat/long columns
+
+Cons of using quadtrees:
+Since there will be many writes/s , each time the quadtree need to be created to maintain the indexing, which is not efficient 
+and compute extensive
+
+Better approach:
+Make the db an in memory store like redis, which can handle upto 1M TPS.
+Also, redis supports Geohashing (same as geospatialindexs), it's easy to create/ store and takes less memory .
+
+Quadtree are greate when there in uneven distribution/location, it also requires no high freqeuncy updates 
+Geohashing: less good when uneven distribution but really good when high frequency updates/writes.
+
+
+clients can also update locations dynamically only when needed , this will reduce the requests/sec greatly.
+
+
+SENDING 1 request at a time to a driver :
+Persist the state of a driver in the Driver table in the DB and query this state whenever sending a new request.
+
+But we need to make sure that this request and this DB entry has  TTL.
+
+1. Approach cron job: issue is the delta=cron_job_time-ttl 
+
+2. Use distributed lock: Redis entry with TTL , either use another separate Redis instance, or use the primary db as Dynamodb which allows
+to add entry with TTL, just create a separate table Driver Lock
+
+Huge surge handling:
+
+USE Message queues before the ride matching svc
+
+
+
+
+https://excalidraw.com/#json=pzd3-L1vxErpt-mabZMbR,JpKsXmOjb8gJFUG_4oY7bg
+

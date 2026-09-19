@@ -1,0 +1,15 @@
+Top K Yt videos by View:
+
+Functional requirements:
+
+Non functional requirements:
+
+
+Core entities:
+
+API:
+
+HLD:
+
+
+Deeep dives:

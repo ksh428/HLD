@@ -1,0 +1,18 @@
+| Code        | Meaning               | Common HLD usage                                 |
+| ----------- | --------------------- | ------------------------------------------------ |
+| **200**     | OK                    | Successful GET/PUT                               |
+| **201**     | Created               | Successful POST creating a resource              |
+| **202**     | Accepted              | Async request accepted for processing            |
+| **204**     | No Content            | Successful DELETE / update with no response body |
+| **301/302** | Redirect              | URL redirection                                  |
+| **304**     | Not Modified          | HTTP caching                                     |
+| **400**     | Bad Request           | Invalid request/input                            |
+| **401**     | Unauthorized          | Authentication missing/invalid                   |
+| **403**     | Forbidden             | Authenticated but not permitted                  |
+| **404**     | Not Found             | Resource doesn't exist                           |
+| **409**     | Conflict              | Duplicate resource / state conflict              |
+| **429**     | Too Many Requests     | **Rate limiting**                                |
+| **500**     | Internal Server Error | Generic server failure                           |
+| **502**     | Bad Gateway           | Gateway received bad response from upstream      |
+| **503**     | Service Unavailable   | Service overloaded/down                          |
+| **504**     | Gateway Timeout       | Gateway timed out waiting for upstream           |
