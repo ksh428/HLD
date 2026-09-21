@@ -1,15 +1,62 @@
-Top K Yt videos by View:
+Top K Yt videos by View: [Needs mor ereading and REV]
 
 Functional requirements:
+Top k most viewed videos of all time
+Top k most viewed videos of last (month,week,day,hour)
+
+Tumbling window (day-to-day, not sliding window)
+
+Below the line:
+arbitrary time window
 
 Non functional requirements:
+1 min between when the event happens and when its tabulated for top k calculations
+10s of ms to retrieve top k 
+handle billions of videos
+100s of thousands of views per second
 
 
 Core entities:
+Video 
+View 
+TimeWindow
 
 API:
 
+GET /views/topk?window={window}&k={k}  ->[videoid,views]
+
 HLD:
+We can assume there is some other already existing svc which is responsible for pushing the views into a Kafka topic,
+we'll create a View consumer to pull the data and persist in a DB.
+
+For getting the top K , we'll create a Top K svc which will query the Db to get the top k videos based on the criteria (timestamp).
 
 
 Deeep dives:
+How to reduce the query time: cache the queries.
+Have a cron job which will run every hour(as this is the min time filtering we support) and get the top K
+and update the cache.
+What happens when the cron fails? 1 option is to fallback to previously calculated data in the redis cache itself 
+keep the data in redis fro around 30 days (TTL)
+
+
+WRITE PROBLEM:
+70b views /day -> 70b/100k/ sec-> 700k/sec 
+
+To optimize this, we have the videoviews topic partitioned by videoid, and a single instance of view 
+consumer will read only a subset of those topics, which will allow to scale the view consumer.
+
+We can shard the db as well, such that each instance only handles subset of videoids.
+
+The view consumer can aggregate the view data for an hour and write it to the db hourly.
+But the main issue is when one of the instances of a view consumer fails, then it would need time 
+catching up for the given hour which will cause significant delays.
+
+Solution is to keep checkpoints every time, and start the aggregation after the checkpoint -> Flink job will do that 
+
+Also whenever a flink job updates a db entry, it will update the entry corresponding to the hour as well as the day.month 
+of which this housr is part of . In this way can index by timestamp,views for faster lookups.
+
+
+https://excalidraw.com/#json=k_u5FMhbrWuPCFzssKIe7,Q3R12sVqSvz92fTChpmU2Q
+

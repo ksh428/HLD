@@ -1,0 +1,74 @@
+Webcrawler:
+It is a program which automatically traverses the web by downloading web pages and following links from 1 page to another.
+
+Problem:
+Design a web crawler to extract text data from the web and store it to train a LLM, and it can run only for 5 days.
+
+Functional requirements:
+1. Crawl the web from seed urls.
+2. Extract the data and store.
+
+NOTE: IN data processing systems,think of multiple stages in a pipeline instead of services.
+
+Scale:
+10 B web pages 
+2MB per page
+
+Non functional requirements:
+-fault tolerant
+-politeness [adhere to robots.txt for the webpage]
+-scale to 10B pages 
+
+Core Entities:
+-Text data 
+- URL metadata
+- Domain metadata
+
+Interface:
+input: set of seed urls 
+output: text data 
+
+Data flow:
+1. take seed urls from the frontier urls set and the IP from DNS.
+2. fetch HTMl.
+3. Extract text from HTML.
+4. Store that text in DB.
+5. Extract the urls in the text and add to the frontier set.
+6. recursively continue until all the urls in frontier have finished.
+
+HLD:
+
+The frontier queue can be kafka/Amazon SQS
+
+
+Deep dives:
+
+The frontier queue needs to be a message queue.
+We can use Amazon SQS, this supports retires with exponential backoff.
+So, we can manintain a list of failed urls (to fetch) and use this feature.
+
+Move the URL's which couldn't be processed into the DLQ
+
+EC2/ AZ vm throughput: 400 gbps 
+and we have 2MB per page =2*8*10^6=16*10^6
+400 gbps -> 2MB/page 
+= 400 GBps/(2*10^6*8 bits)
+400*10^9/16*10^6
+==25k pages/s 
+
+we need 10^10 pages 
+sec= 10^10/2*10^4
+=10^6
+=10 days 
+so we need atleast 2 machines
+
+Efficiency:
+1. dont crawl a url that has already been crawled [use db lookups]
+2. dont crawl a url which has duplicate content which has already been parsed.:
+crawler stores the html html hash into the db, and put it on the worker only if it doesnt exist before.
+
+https://excalidraw.com/#json=cZTmZf8awk4qQTsuLwghV,sqxcRHDRNVM2aOr3DsmNRQ
+
+
+
+

@@ -1,0 +1,53 @@
+Message Queue:
+
+Terminology:
+Broker: server where the queue resides
+
+Partition= queue in Kafka
+
+Topic: logical grouping of partitions, producers publish to and consumers consume from topics
+
+Message= Records
+
+Consumers read based on next offset
+
+Messages in kafka are immutable
+
+Kafka Consumers read messages from Kafka topics using a pull-based model. They poll the broker for messages 
+at regular intervals .
+
+Using it in a interview:
+2 ways MQ or stream.
+
+MQ:
+consumed by 1 consumer in CG.
+1. processing can be done async, ex: Youtube video transcoding
+2. To ensure messages are processed in order, ex ticketmaster
+3.
+
+Stream:
+Consumers consume the messages as they arrive in real time, so more than 1 CGs can consume the msgs.
+1. processing of data needs to be real time [ad click aggregator]
+2. Messages need to be processed by multiple consumers simultaneously.
+
+Efficiency:
+1. Limit the max message size to 2MB.
+2. Don't store large data in kafka message.
+
+Scaling:
+1. Horizontal scaling: mostly handled nby kafka clusters.
+2. Partitioning strategy: choose a key which leads to evenly spread out data.
+
+
+Hot partitions:
+1. If ordering is not important: go no key partitioning, this looses ordering but is efficient.
+
+
+
+Fault tolerance and durability:
+kafka ensure durability using replication, each partition is replicated across multiple brokers with one broker acting as the leader and others as followers.
+
+
+Kafka doesnot support consumer retires out of the box, but supports producer retires.
+
+We can change the retention policy of messages.
