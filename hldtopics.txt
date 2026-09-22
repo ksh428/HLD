@@ -1,0 +1,42 @@
+| #  | Problem                         | Key concepts                                                    |
+| -- | ------------------------------- | --------------------------------------------------------------- |
+| 1  | **URL Shortener**               | API design, DB, sharding, caching, ID generation                |
+| 2  | **Rate Limiter**                | Redis, distributed state, token bucket/sliding window           |
+| 3  | **WhatsApp / Chat**             | WebSockets, offline messages, ordering, delivery, presence      |
+| 4  | **Uber / Ride Hailing**         | Geo-indexing, location updates, matching, WebSockets            |
+| 5  | **Google Drive / Dropbox**      | Object storage, metadata, chunking, sync, deduplication         |
+| 6  | **Twitter / News Feed**         | Fan-out, queues, caching, ranking                               |
+| 7  | **Ticket Booking**              | Concurrency, locking, inventory, transactions, idempotency      |
+| 8  | **Payment System**              | Idempotency, consistency, retries, transactions, reconciliation |
+| 9  | **Kafka / Message Queue**       | Partitioning, ordering, replication, consumer groups            |
+| 10 | **Distributed Key-Value Store** | Consistent hashing, sharding, replication, quorum, consistency  |
+
+
+ALL TOPICS:
+1. sharding
+2. Indexing (with geo indexing and what to index)
+3. Replication, master follower arch .
+4. Caching: R/W types + types)
+5. Message queues and pubsub (types and Kafka deepdive)
+6. Specialized DB: Dynamodb and cassandra , Time series DB
+7. Networking protocols: HTTP, WebSockets, SSE, long/short polling
+8. DDistributed locking 
+9. CDC
+10. ACID prooperties and transcations
+11. Blob store 
+12. Auth: oauth flow, jwt, http headers
+13. Load balancer, api gw and proxies
+14. Zookeper (distributed state and config)
+15. Streams and event driven architecture
+16. Search optimised DB: elastic search
+17. CAP
+
+LESS IMPORTANT:
+1. Cryptography
+2. dns working
+3. https working
+4. networking 
+5. CDN
+6. SQL vs NOSQL
+7. Optimistic/pessimistic locking
+8. Flink job [stream processor]

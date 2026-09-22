@@ -1,0 +1,55 @@
+Ad click aggregator:
+It is a system which collects and aggregates data on add clicks. It is used by advertisers to track the performance
+of their adds and optimize their campaigns. For the problem we'll assume these adds are displayed on a website like FB.
+
+Functional requirements:
+1. Users can click adds and get redirected to advertisers page.
+2. Advertisers can query the click metrics over time w 1min granularity
+
+Scale:
+10M adds at a time 
+10k clicks/sec
+
+Non functional requirements:
+1. low latency analytics <1s 
+2. support peak 10k cps
+3. fault tolerant and data integrity(don't loose clicks)
+4. idempotency of add clicks
+
+System Interface and data flow:
+
+Input data
+- click data
+- advertiser queries
+
+Outputs:
+- redirection
+- aggregate metrics
+
+Data flow:
+1. click data comes into System
+2. user is redirected 
+3. data is validated
+4. data persisted in backend and aggregated
+5. aggregation is queried
+
+HLD:
+Cassandra as the db as it is write optimised but it is not optimised for range queries and aggregation. For that we need a read and aggregation optimsed db.
+Also its a good idea to batch process the data using Spark [every 5min], and write it down to the olap (SNOWFLAKE)
+
+
+Deep dives:
+
+Flink will take events out of the event stream and aggregate them on real time.
+The aggregation window of flink will be 1min.
+Flush windows:10s , write the aggregated result to the db
+
+Enable retention policy on Kafka to be fault tolerant (flink going down)
+
+
+How to handle hot partitions:
+If there is a very popular add, then there will be hot partition.
+To tackle this, append a random number to the ad id which is the partition key. OLAP will strip this random number and store it.
+
+Stream processors like Flink also have a feature called checkpointing. This is where the processor periodically writes its state
+to a persistent storage like S3. If it goes down, it can read the last checkpoint and resume processing from where it left off. 

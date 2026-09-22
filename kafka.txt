@@ -42,11 +42,8 @@ Scaling:
 Hot partitions:
 1. If ordering is not important: go no key partitioning, this looses ordering but is efficient.
 
-
-
 Fault tolerance and durability:
 kafka ensure durability using replication, each partition is replicated across multiple brokers with one broker acting as the leader and others as followers.
-
 
 Kafka doesnot support consumer retires out of the box, but supports producer retires.
 

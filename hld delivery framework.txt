@@ -16,3 +16,10 @@ c. capacity estimation: you can skip this and do this only if it affects your de
 
 
 https://excalidraw.com/#json=qKJoV5BYxUqBWRq0unLAD,Zp8KVG0egxQ_chDQt7F02g
+
+
+FOR INFRA DESIGN PROBLEMS (add click aggregator,web crawler, top k etc):
+1. Requirements
+2. System Interface and data flow
+3. HLD
+4. Deep dives
