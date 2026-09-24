@@ -1,0 +1,46 @@
+Design fb post search:
+without using elasticsearch, postgres full text
+
+Functional requirements:
+1. Users should be able to create posts 
+2. Users should be able to like and comment on posts 
+3. Users should be able to search 
+4. sort by likes and time
+
+out of scope:
+filter search 
+
+Non functional requirements:
+1. Low latency (<500ms) searches
+2. High throughput
+3. High Availability over consistency for post discovery . eventual consistency (new posts appear in 1min)
+4. High recall, all of the posts 
+
+Scale:
+1B users 
+Writes:
+posts: 1B/100k s=10k/sec [1 post per user per day]
+likes: 10B/100K s= 100k/s [10 per user]
+
+Reads:1B/100k s=10k/sec [1 time user per day]
+
+Storage:
+Post= 1B*365*10 yrs=3.6T
+Storage= 3.6T* 1kb= 3.6 pb
+
+core entities:
+Users 
+Posts 
+Likes
+
+API:
+
+POST /posts 
+PUT /posts/id/likes 
+PUT /posts/id/comments 
+GET /search?query={keyword}&sort={time}
+
+HLD:
+
+
+Deep dives:

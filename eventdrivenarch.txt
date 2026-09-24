@@ -1,0 +1,9 @@
+EDA:
+This involves publishing events and some consumer listening to them and acting on top of it.
+This involves Message queues (kafka) and sometimes event streams (kafka streams)
+
+When to use:
+1. When dealing with financial data or Audit requirements.
+2. When you need realtime data pipelines (or aggregations or insights) <1min .
+This uses EDA with streams and stream processing (flink)
+3. Need to replay/ reprocess historical data.

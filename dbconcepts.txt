@@ -1,4 +1,40 @@
 Sharding:
+Split your data across multiple machines.
 splitting db into multiple shards such that no single shard contains the entire data 
 what to shard by? Shard key 
 
+Sharding vs partitioning:
+partitioning: Splitting data within a single db instance using table ranges/hash partition.
+Sharding: Split your data across multiple machines. [horizontal partitoning across multiple machines]
+
+
+Partitioning:
+Partitioning means splitting a large table into smaller pieces inside a single database instance, so that query is efficient.
+
+Horizontal partitioning: create multiple tables with a set/range of rows but all the columns.
+
+Vertical partitioning: create multiple tables with a set/range of columns but all the rows, you'll need to introduce
+a primary key for this 
+
+Sharding techinqueues:
+Range based 
+
+Hash based:
+hash(shard_key)%N , where N=no of shards
+-> Even distribution.
+But the better way is Consistent hashing.
+
+Handling hot spots in Shards:
+Celebrity problem: celebrity shards are host spots 
+
+How to handle them:
+1. Isolate hot keys to dedicated shards
+2. Use compound shard key = {userid:timestamp}
+
+Cross shard queries: These are expensive
+1. Cache the results
+2. Pre-compute using background/cron jobs
+
+
+Eventual consistency:
+SAGA PATTERN

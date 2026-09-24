@@ -13,9 +13,9 @@
 
 
 ALL TOPICS:
-1. sharding
+1. sharding and partitioning ->DONE
 2. Indexing (with geo indexing and what to index)
-3. Replication, master follower arch .
+3. Replication, master follower arch . 
 4. Caching: R/W types + types)
 5. Message queues and pubsub (types and Kafka deepdive)
 6. Specialized DB: Dynamodb and cassandra , Time series DB
@@ -27,7 +27,7 @@ ALL TOPICS:
 12. Auth: oauth flow, jwt, http headers
 13. Load balancer, api gw and proxies
 14. Zookeper (distributed state and config)
-15. Streams and event driven architecture
+15. Streams and event driven architecture ->DONE    
 16. Search optimised DB: elastic search
 17. CAP
 
