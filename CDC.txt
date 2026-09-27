@@ -1,0 +1,11 @@
+Method to capture changes in DB and transmit to downstream systems.
+
+Methods:
+1. Append changes to log 
+2. Emit events for changes 
+.. etc ..
+
+
+2 Types:
+Pull and Push based.
+

@@ -35,6 +35,22 @@ Cross shard queries: These are expensive
 1. Cache the results
 2. Pre-compute using background/cron jobs
 
-
 Eventual consistency:
 SAGA PATTERN
+
+
+DATABASE REPLICATION:
+Replicate the db into a different hardware unit.
+
+Master -> Slave
+
+Copy can be sync[cdc]  / async
+
+1 idea is to make sure that the writes are made only to the Master DB , and reads through the slaves .
+If both master and slave can write, then there needs to be to and forth comm to keep each other upto date 
+
+Its possible that the networking in between the db's fail causing the writes to fail as well:
+Split brain problem: now both act as independent masters.
+The way to solve it is introducing another node in between and using it as the source of truth for transcations.
+It will keep an updated state of both the db's and will allow/deny a transaction.
+SAGA is also a soln along with 2PC.

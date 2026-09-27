@@ -1,0 +1,31 @@
+WHAT:
+It is used to coordinate Critical section (common data) across multiple servers that may be running on different
+physical servers.
+This helps in preventing data inconsistency issues.
+
+Technologies to implement this:
+Redis 
+Zookeper
+db-based locks 
+
+Redis based:
+Set lock on a particular row with an unique token and TTL
+
+Once the operation is successful: The lock is deleted/released by the server 
+
+TTL is required: for the case when a server has acquired the lock but it crashed/takes a lot of time to  comeplete
+its operation 
+
+Unique Token: It is needed to avoid blind deletion of a lock by a svc, when it's no longer being held by it .
+
+Distributed locks however doesnot guarantee data correctness.
+Suppose A took more time than TTL after acquiring the lock, meantime B also acquired the lock after TTL 
+, so now ideally both A and B has access to the lock and both can modify.
+
+To solve this Fencing Tokens:
+Assign the token in increasing order for every lock acquisiton, so the downstream db only supports operations having a 
+token higher than the current token.
+
+
+Db based locks:
+Db also supports locks 

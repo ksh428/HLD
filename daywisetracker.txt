@@ -1,0 +1,21 @@
+14/09:
+2 problems
+rate limiter and youtube -> DONE
+
+16/09:
+FB live feed ->DONE 
+
+
+20/9:
+Yt top k 
+web crawler ->done
+kafka deepdive ->done
+
+
+21/9
+Ad click aggregator
+db/storage rev full 
+
+22/9
+FB post search
+
