@@ -1,4 +1,6 @@
 SAGA DESIGN pattern is used for migration from monolith to microservices
+It gives EVENTUAL CONSISTENCY.
+
 IT IS USED TO MANAGE Distributed TRANSACTIONS ACROSS MULTIPLE MICROSERVICES TO ENSURE DATA CONSISTENCY
 
  It mainly solves acid properties for a distributed non shared db system: each micro svc has its own db and the contract is
@@ -9,7 +11,7 @@ microservice and get the value instead of calling its db.
 It works on events, each serivce send out a success or failed event to a queue and the dependent service listens on that 
 particular event, and performs roll forward or roll back based on that
 
-[SAGA Type: ORCHESTRATOR]
+[SAGA Type: ORCHESTRATOR] EX: Temporal
 There is a central component called orchestrator which calls each svc and looks for its result,if it succeeds it calls the next svc else rolls back
 as appropriate.
 
@@ -17,5 +19,14 @@ WHEN TO USE:
 1. Microservices with all or nothing flow .
 2. Keep DB's in sync.
 3. Dealing with long-running processes: When a transaction takes seconds or minutes to complete 
+
+2 Phase Commit: [strong consistency]
+
+The orchestrator sends out the transcation to the indv db's , the db's perform the operation and sends response
+back to the orchestrator that whether it could be done or not, if any 1 votes no, then the performed operation are reversed 
+
+If all agree: then the orchestrator sendsout the commit msg to all the db's to perform the operation and release the lock 
+
+This is an issue in a high throughput system.
 
 

@@ -1,0 +1,27 @@
+ACID: Atomicity Consistency Isolation Durability 
+
+Atomicity: All or nothing
+All transactions happen or all dont happen . The dbms will perform rollback if some operation failed.
+
+Consistency:
+The transactions must follow all the rules defined by the DBMS and must leave in compliant state.
+
+Isolation:
+Concurrent transactions shouldn't interfere in ways that produce incorrect results, this is needed to maintain
+data consistency.
+There are different Isolation levels:
+Serializable:
+Read Commited:
+Repeatable.
+
+Each type solves one of the problems: Phantom reads, Dirty read, Non repeatable read
+
+From weakest → strongest:
+
+Read Uncommitted → dirty reads possible [everyting possible]
+Read Committed → prevents dirty reads
+Repeatable Read → prevents dirty + non-repeatable reads
+Serializable → transactions behave as if executed one-by-one [solves all problems but slow]
+
+Durability:
+Data is persisted once transaction is Commited even after system failures.

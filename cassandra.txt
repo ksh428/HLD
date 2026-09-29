@@ -1,0 +1,32 @@
+Column-wide db.
+
+Primary key:
+consists of 1/more partition key and [optional] clustering keys.
+
+[same as Dynamodb]
+Partition Key - One or more columns that are used to determine what partition the row is in.
+Clustering Key - Zero or more columns that are used to determine the sorted order of rows in a table.
+
+cassandra achieves horizaontal scaling by partitioning using Consistent hashing.
+
+High availability by node replication.
+Cassandra is eventually consistent
+
+Storage model:
+LSM tree (Log Structured Merge Tree): this helps in achieving high throughput.
+
+
+WRITE MODEL:
+When a write request comes in , it is first written into disk as a commit log for failure persistence.
+It is paralley written to Memtables [in RAM]. This is a APPEND ONLY LOG mode, that's why writes are faster.
+when these 2 are done, ack is sent back.
+Memtables periodically flush the data to disk  in SSTable. Compaction takes place to update the data periodically 
+
+USE WHEN:
+high throughput (>50k rps)
+writev >> read 
+predictable limited query patterns
+
+AVOID WHEN:
+need flexible queries
+need strong consistency

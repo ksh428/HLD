@@ -1,3 +1,5 @@
+Key:value db.
+
 Primary keys:
 
 Make the most common query colkumn as the partition key
@@ -32,3 +34,9 @@ Dynamo db supports both eventual consistency (default) and strong consistency (w
 
 Dynamodb streams -> similar to CDC for ddb. Message queues/ workers will take the changes and work on top of it .
 
+Scenario where to use GSI:
+You have an e commerce application, where there are 2 types of very frequent queries: get details for orderid 
+get all orders from a userid .
+
+So, partition key: orderid 
+GSI: userid 
