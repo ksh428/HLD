@@ -5,6 +5,8 @@ SELECT * FROM documents WHERE document_text LIKE '%search_term%'
 
 This is highly inefficient.
 
+DONT USE THIS AS THE PRIMARY DB, JUST STORE THE THIN
+
 Search optimized databases, on the other hand, are specifically designed
 to handle full-text search. They use techniques like indexing, tokenization,
 and stemming to make search queries fast and efficient.

@@ -1,0 +1,10 @@
+Flink is a distributed stream-processing engine used to process large volumes of data continuously, 
+often with low latency and stateful processing.
+
+Flink maintains internal state and checkpoints which it stores in a blob store.
+If a task fails it will start back from the checkpoint itself instead of strting from the start.
+
+Often it is used with Kafka to process large streams of data in realtime.
+
+
+

@@ -6,4 +6,8 @@ When to use blob storage:
 4. In a typical setup you will have a core database like Postgres or DynamoDB that has pointers (just a url) to the blobs stored in S3.
 5. Adv: they are highly durable and highly scalable, cost efffective
 
+Concepts:
+1. multipart upload api 
+2. download via cdn
+
 Ex: Amazon S3, Azure blob etc.

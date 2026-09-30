@@ -1,0 +1,49 @@
+GraphQL:
+
+It allows fetching all the data at once. This solves the problem of overfetching and underfetching
+and diverse needs of data.
+
+ex:
+query {
+  event(id: "123") {
+    name
+    date
+    venue {
+      name
+      address
+    }
+    tickets {
+      section
+      price
+      available
+    }
+  }
+}
+
+The equivalent of this in REST: would be:
+
+GET /events/123
+GET /events/123/tickets 
+GET venues/12343
+
+Pagination:
+Resturn the result from the API in chunks/pages.
+
+Offset based pagination: 
+/events?offset=20&limit=10
+this specifies what was the last record which was brought and how many records per page 
+
+Cursor-based Pagination:
+
+Each response returns a pointer to the last fetched record , so the future requests can use to get the next records.
+
+/events?cursor=cmd9atj3p000007ky19w1dpy2&limit=10
+[where the prev response contains cmd9atj3p000007ky19w1dpy2]
+
+SORTING AND FILTERING:
+Use query params to control it.
+
+Idempotency Key:
+POST is not idempotent. Suppose a POST request fails and the retry happens and the transcation happens 2wice.
+The fix is an idempotency key. The client generates a unique ID for each logical operation and sends it with the request.
+Server has the logic to handle requests with same idempotency key.

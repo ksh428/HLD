@@ -2,9 +2,9 @@ Apache zookeeper:
 
 It is a centralised co-ordination service  used by large distributed systems to store configuration data,
 synchronize actions, and manage communication between different servers.
+What they store: ip address of servers/db ,partitioning breakdown etc.
 
 It's just a key value store 
-
 
 Use when:
 1. Need to coordiante between differnet servers.

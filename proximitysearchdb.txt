@@ -13,3 +13,9 @@ Single lat/long encoded key:
 2. Best for point data 
 3. Suffers from boundary artifacts: need more querying to get relevant data 
 4. Use when points at scale.
+
+Elasticesearch supports Geospatial search: 
+geo_point: Stores a single latitude/longitude pair. Use this for things like restaurant locations,
+ user check-ins, or delivery addresses.
+geo_shape: Stores arbitrary geometries — polygons, lines, circles, bounding boxes. Use this for delivery zones, 
+city boundaries, or service coverage areas.

@@ -1,0 +1,2 @@
+REST:
+It is a way to create API's to communicate between services.
