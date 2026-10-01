@@ -15,28 +15,33 @@
 ALL TOPICS:
 1. sharding and partitioning ->DONE
 2. Indexing (with geo indexing and what to index)
-3. Replication, master follower arch . 
-4. Caching: R/W types + types)
-5. Message queues and pubsub (types and Kafka deepdive)
-6. Specialized DB: Dynamodb and cassandra , Time series DB
-7. Networking protocols: HTTP, WebSockets, SSE, long/short polling
-8. DDistributed locking 
-9. CDC
-10. ACID prooperties and transcations
-11. Blob store 
-12. Auth: oauth flow, jwt, http headers
-13. Load balancer, api gw and proxies
-14. Zookeper (distributed state and config)
+3. Replication, master follower arch . -> DONE
+4. Caching: R/W types + types and CDN -> DONE
+5. Message queues and pubsub (types and Kafka deepdive) -> DONE
+6. Specialized DB: Dynamodb and cassandra ->DONE
+7. Networking protocols: HTTP, WebSockets, SSE, long/short polling ->DONE
+8. Distributed locking ->DONE
+9. CDC ->DONE 
+10. ACID properties and transcations ->DONE
+11. Blob store ->DONE
+12. Auth: oauth flow, jwt, http headers ->DONE
+13. Load balancer, api gw and proxies ->DONE
+14. Zookeper (distributed state and config) ->DONE
 15. Streams and event driven architecture ->DONE    
-16. Search optimised DB: elastic search
-17. CAP
+16. Search optimised DB: elastic search ->DONE
+17. CAP ->DONE
+18. API Design -> DONE
 
 LESS IMPORTANT:
 1. Cryptography
 2. dns working
 3. https working
 4. networking 
-5. CDN
-6. SQL vs NOSQL
-7. Optimistic/pessimistic locking
-8. Flink job [stream processor]
+5. SQL vs NOSQL
+6. Optimistic/pessimistic locking
+7. Flink job [stream processor] ->DONE
+8.Time series db
+
+TBD PROBLEMS:
+1. Payment system 
+2. Distributed Job scheduling system

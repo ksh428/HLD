@@ -1,0 +1,70 @@
+Functional Requirements:
+1. Schedule jobs [based on events (also manual ) / periodically]
+2. Execute the job 
+3. Get list of all the job
+
+Non functional requirements:
+1. High consistency in executing the job at the correct schedule point.
+2. High availability w.r.t creating jobs/ viewing them.
+3. Low latency job scheduling [<1s] 
+4. Fault tolearnt: jobs once queued should always be executed not missed.
+
+Core entities:
+Job 
+User
+Schedule 
+Event 
+Task [combination of schedule + job]
+Runs 
+
+Data flow:
+A new job schedule request is recieved with a given trigger -> we add this job into our service and persist It
+in db -> when the schedule/trigger conditon is met -> we trigger the job -> update the db -> check if need to execute again 
+-> keep it else remove it -> repeat
+
+API:
+
+POST /jobs
+
+GET /jobs/{id} -> partial_job [id and status]
+
+GET /jobs/{userid} -> list all jobs created by the user
+
+Scale:
+1B jobs/day 
+/sec =10k jobs/sec 
+
+Lets assume the binary is 1KB at max.
+storage: 10kb*10*9 =10^12= 10TB
+
+HLD:
+
+Trigger service: will query the db every 1min, to get the list of jobs to be performed in the next 1min
+
+
+Deep dives:
+
+Instead of docker you can use serverless on demand compute like AWS lamda or Azure Functions.
+Suppose some jobs were failed to be queried due to some reason, then we can hava a periodic cron job in
+the trigger svc to add them to the queue.
+
+For db we can do index if using Postgres (status,timestamp)
+
+Otherwise we can use write heavy db like cassandra or dynamobdb 
+
+partitionkey: [having a custom key here makes sense]
+time buckedted partitionning can be used .
+Something like maintain say 24 partitions each for 1 hr, and the jobs in an hour goes to the specific partition.
+Maintain the orders using sort key : (jobid+timestamp) to keep it.
+
+
+Maintain idempotency: whenever a worker crashes, to prevent it from executing the same job again, use 
+a unique idempotency key for each execution.
+
+For custom db change use CDC with kafka to track.
+Break the monolith trigger svc into time sharding and custom db watcher
+
+
+supporting: binary execution
+
+triggers: manual, time , changes in a db
