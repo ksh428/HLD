@@ -31,6 +31,7 @@ ALL TOPICS:
 16. Search optimised DB: elastic search ->DONE
 17. CAP ->DONE
 18. API Design -> DONE
+19. Optimistic concurrency control
 
 LESS IMPORTANT:
 1. Cryptography
@@ -44,4 +45,3 @@ LESS IMPORTANT:
 
 TBD PROBLEMS:
 1. Payment system 
-2. Distributed Job scheduling system

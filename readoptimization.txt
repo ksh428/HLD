@@ -1,0 +1,4 @@
+1. Caching 
+2. Indexing 
+3. CDN 
+4. Precompute if reading/aggregation is expensive

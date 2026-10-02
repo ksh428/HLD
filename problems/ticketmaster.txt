@@ -36,6 +36,10 @@ this is done using redis (ticketid, ttl)
 this will make sure that after ttl mins, this entry is removed from the cache, if the user couldnt
 complete the payment 
 
+Redis:
+key= ticketid
+value= userid
+
 How will the query work? The client gets the list of all the available tickets from the db and gets 
 the list from the cache (reserved)
 return set1 - set2 

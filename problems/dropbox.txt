@@ -20,7 +20,7 @@ Core entities:
 
 API
 
-POST /uploadfiles
+POST /files
 body: file and file metadata
 
 GET /files/fileid -> file and file metadata 
