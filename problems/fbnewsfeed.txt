@@ -34,10 +34,21 @@ User: uid....
 Post: pid,uid,...
 Likes: lid, uid, type (like on a post/comment)
 Comments: cid,uid,pid ...
-Follows:  followeeid,followerid
+Follows:  followeeid,followerid  [THIS CAN BE MADE EFFICIENT WITH COMPOSITE PRIMARY AND SECONDARY INDEXING]
 
     Get list of followers of uid : select * from Follows where fikkiweeid=uid 
     and similarly for the other query 
+
+
+Imporving follow queries:
+RDBMS:
+COMPOSITE Primary key on (followerid,followeeid) : why do we need composite pk?
+because the PK needs to be unique, if we just use followerid, then a user cant follow multiple people.
+SECONDARY INDEX on (followeeid)
+
+NOSQL:
+PRIMARY KEY: (followerid,followeeid)
+GSI: (followeeid,followerid)
 
 Activity table : usefulf for effictevely giving number of likes / comments on a table 
 

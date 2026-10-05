@@ -46,8 +46,22 @@ and so having 2 msvc will enable to scale it efficiently
 1B/ 100k= 10^9/10^5  -> 10K swipes/sec 
 
 Postgres can handle it, but mention that cassandra is write optimised and can better handle it and cheap.
+Have user1id as the partiton key and user2id as the clustering key.
 But cassandra is eventually consistent.this is problem 
 if we want to support immediate push notification for matches, the db might not yet have the updated likes 
+
+WHAT IF USER1 AND USER2 both like at the same time:
+Run cron job periodically to notify both.But if our goal is to notify users immediately this fails.
+
+Other option is to use Cassandra's inbuilt single partition guarantees: if both the users are in the same
+partion then cassandra ensures atomicity.
+We can do this by composite primary key: {(user1,user2),user1,user2 }
+
+The other options is to use Redis for atomic operations
+with the redis key as user1:user2  -> by using luna script, we can make sure that swipe recording and match checking happens 
+as a single operation.
+
+
 
 The solution for this, running a cron job, to asynchronously notify the matches 
 [the persons are not aware of when the other person liked you]
@@ -58,8 +72,6 @@ This ensures atomic operations and lookups
 For low latency feed:
 The existing approach of creating the feed-> first get the user pref from profile db, then query 
 the profile db again with the prefs and return them, specifically based on lat and long -> very time consuming
-
-To optimize this, use geo-spatial indexes
 
 The other option is using elasticsearch which also provides fast geo-spatial lookups.
 

@@ -44,6 +44,10 @@ How will the query work? The client gets the list of all the available tickets f
 the list from the cache (reserved)
 return set1 - set2 
 
+HOW TO SHOW THE ALL THE LOCKED SEATS AS BOOKED FOR A SHOW:
+keep a sorted set of all the locks for a show in redis. Sorted by expiry time asc .
+The booking service cleans up the expired locks before showing the booked state.
+
 deep dive:
 the optimization which can be done is in search. Using normal Database is slower 
 Use search optimized database 
