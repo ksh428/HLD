@@ -26,7 +26,7 @@ Placing the rate limiter:
 1. Option is to place it directly inside the Gateway, and make it check that if we can even serve the
 request befre routing it to the msvc
 
-The clients can be identified by IP, userid/device id, api key 
+The clients can be identified by IP [for public api's when users dont signup], userid/device id [forprivate api's where users signup], api key 
 
 Algo:
 1. Fixed window [cons:boundary effect]
@@ -40,6 +40,9 @@ now for the current window if we have got 6 request in 70% of thw window , we'll
 We'll need to store the token state/user outside of the G/W as there will be multiple G/W's 
 
 Use a key value store like Redis for doing that . GET/SET on the redis key.
+
+Use luna script for the entire transcation in redis, as 2 simultaneous reads may be allowed but there was only 1 token left.
+If read-calculate-update is part of a single transcation, then this problem is solved.
 
 Request comes in: G/W fetches the last fill time and token count for the user as well as refill rate 
 update the counts to redis and responds back to the client  
@@ -62,9 +65,11 @@ Redis supports 100K op/sec.
  Fail open : allow all requests to the backend when the RL fails 
  Fail close: block all requests to the backend when the RL fails.
 
- Redis clusters supports the replicas to handle this .
+ Redis clusters supports the replicas to handle this .It also supports auto sharding to handle load.
 
- For centralised dynamic configuration management use  Zookeper [store the rules locally into the g/W
- and listen for changes from zookeper, whcih will push the changes.]
+ For centralised dynamic configuration management and realtime notification use  Zookeper [store the rules locally into the g/W
+ and listen for changes from zookeper, whcih will push the changes.] This is push based model.
+
+ We can also have a pull based model , where the api gw periodically polls for config changes.
 
  https://excalidraw.com/#json=rZgN6vwO47Yh8LngOUY_E,Lzn_3A8Kql7_lQGFdKGTsQ

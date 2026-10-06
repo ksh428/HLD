@@ -8,7 +8,8 @@ Non functional requirements:
 messages delivered with low latency <500ms
 guaranteed delivery of messages 
 Billions of users, highh throughput
-Fault tolerant
+Fault tolerant : message delivery is guaranteed
+high availability w.r.t sending and reciving messages, eventual consistency (<2s) w.r. message read.
 
 Core Entitites:
 User 
@@ -21,20 +22,52 @@ Dynamodb (or cosmosdb)
 
 API:
 we'll be using websockets over TCP
+
+createchat()
+sendmessage()
+modifyusers()
+
+recievemessage()
+chatupdate()
  
 
 HLD:
+
+Important:
+when the server sends a msg over websocket, it waits for an ack from the client.
+If the websocket connection is broken, the ack is not recieved and the server retires it for some time, after that it closes the 
+connection, forcing the client to recreate the connection and get the msg from inbox.
+
+We can improve this by heartbeats.
+
+Chats table:
+chatid as pk
+
+Chat participants:
+pk:{chat id,participantid}
+gsi:{participantid,chatid}
+
 the chat server will maintain a hashmap of the active open WS connections:
 client1:ws1, client2:ws2 ...
 
 For designing chat push when back online:
-use separate tables Messages and Inbox, inbox will contain the messages for each recipientid
+use separate tables Messages and Inbox, inbox will contain the messages for each recipientid. This makes the message durable
 We can maintain per deviceid, a cursor of lasstacked successfully delivereed message.
 The client will request for the messages from the next cursor when back online.
 
 Write steps:
 Client asks for the corresponding chat server -> chat registry gives a server numer using  consistent hashing to the client 
-->connects to the specific server and writes to it (messages table and inbox table)
+->connects to the specific server and writes to it (messages table and inbox table).
+The chat servers which serve a set of users are kept in a centralised registry like Zookeper
+
+There are 2 ways in which we can handle last seen, we can send periodic heartbeats from the client to presence svc,
+which will populate the status for the user in cache with a ttl, and whenever we request the last seen for a user 
+from the chat svc, we read it from the redis instance.
+
+The other option is, whenevr the client requests for a last seen fr other user, get the server corresponding to the other 
+user , and at that time if the user is connected return online.
+Just maintain a db which tracks the disconnects of the websocketconnection for each user and stores it as lastseen,
+override it when the connection is back again.
 
 
 

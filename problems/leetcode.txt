@@ -23,7 +23,7 @@ Competition
 
 API:
 
-GET /problems?difficulty={}&topic={} -> list of <partiaal problems[]>
+GET /problems?difficulty={}&topic={} -> list of <partial problems[]>
 
 GET /problems/problemid
 
