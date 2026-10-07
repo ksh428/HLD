@@ -6,7 +6,7 @@ Functional requirements:
 Non functional requirements:
 1. scale to millions of videos and 1000s of comments /sec 
 2. [CAP] availability > consistency fo comments section
-3. low latency comment braodcast [new comment comes in, it should show up on everybodys feed immediately ]
+3. low latency comment braodcast [new comment comes in, it should show up on everybodys feed immediately <1s ]
 
 Core entities:
 Comments 
@@ -36,6 +36,8 @@ db for 50 comments every time, we can cache the 1000 comments for a user:video k
 Initial approach was to use polling, to get the comments/post them as well as for broadcast.
 
 This is not a efficient approach as latency is 2-5 s, depending on polling interval
+
+For fetching comments use cursor pagination.
 
 Redis:
 user:video -> comments[]

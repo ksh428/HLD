@@ -1,4 +1,4 @@
-Top K Yt videos by View: [Needs mor ereading and REV]
+Top K Yt videos by View: [Needs more reading and REV]
 
 Functional requirements:
 Top k most viewed videos of all time
@@ -11,7 +11,7 @@ arbitrary time window
 
 Non functional requirements:
 1 min between when the event happens and when its tabulated for top k calculations
-10s of ms to retrieve top k 
+10s of ms to retrieve top k []we can keep it realtime <200ms]
 handle billions of videos
 100s of thousands of views per second
 

@@ -25,9 +25,16 @@ POST /videos{
 }
 
 //watch
-GET /vidoes/videoid -> video and video metadata
+GET /vidoes/videoid -> just return the video metadata,the metadata will contain info about the urls necesssary 
+
 
 HLD:
+Just know about the following:
+video codec
+bitrate 
+video container 
+
+chunks are playable units of a video typically a few seconds long
 
 4GB is the limit in case of Azure App Gateway
 Upload the video directly to AZ blob storage using presigned urls (the video service requests for these
@@ -38,7 +45,12 @@ by azure functions to update the db
 
 Handling video playbaacks in lower resolutions:
 We can transcode the video for different bitrates/resolutions asynchronously and store them in  s360, so whenever a particular
-resolution is selected, we get from that particular array [Manifest file]
+resolution is selected, we get from that particular array [Manifest file].
+For video streaming the client downloads the manifest file and selects a bit rate based on filter by user 
+or network conditions, and starts adaptive streaming.
+
+Resumbale uploads/downloads: use chunk fingerprinting to identify chunks for resum download/upload and for security 
+verify it with the fingerprint stored in the db.
 
 
 https://excalidraw.com/#json=WnxTJCst_qASrxiSYPuA9,fQm4aZAm91Yd9rB99qMsGw
