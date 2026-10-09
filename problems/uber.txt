@@ -17,7 +17,7 @@ Location
 
 API:
 
-(request and create a ride)
+(request and create a ride) [This can be GET as well if we dont want to store ride lookups]
 POST /ride/fareestimate  -> partial <Ride>
 {
     startloc,
@@ -53,12 +53,15 @@ HLD:
 
 Ride svc is going to handle fare estimates.It will use a 3rd party mapping app like googlemaps or we can use a black box 
 denoting a ML model, to get estimates.
-It will also return the next lat/long of where the driver needs to go.
+It will also return the next lat/long of where the driver needs to go. It will also handle ride requests by persisting them into a db .
+and triggering ride matching service.
 
 driver client will call the location service every 5s to update theier locations in the location db.
 
 Ride matching svc will query this db, to get the relevant drivers for a current ride and the notification svc will send 
 the ride requests to them
+
+Notification service will send request to driver for accepting/rejecting a ride request.
 
 
 Deep dives:

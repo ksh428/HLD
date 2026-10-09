@@ -34,15 +34,21 @@ Data flow:
 5. aggregation is queried
 
 HLD:
-Cassandra as the db as it is write optimised but it is not optimised for range queries and aggregation. For that we need a read and aggregation optimsed db.
-Also its a good idea to batch process the data using Spark [every 5min], and write it down to the olap (SNOWFLAKE)
 
+Server side redirect is preferred as users can go to advertiser websites without us knowing about it.
+The click processing svc processes the click and returns 302 redirect status code.
+
+Cassandra as the db as it is write optimised but it is not optimised for range queries and aggregation. 
+For that we need a read and aggregation optimsed db [OLAP].
+Also its a good idea to batch process the data using Spark [every 5min], and write it down to the olap (SNOWFLAKE)
 
 Deep dives:
 
 Flink will take events out of the event stream and aggregate them on real time.
 The aggregation window of flink will be 1min.
 Flush windows:10s , write the aggregated result to the db
+
+Flink also supports flush intervals, so we can aggregate on a minute boundary but flush the results every couple of seconds
 
 Enable retention policy on Kafka to be fault tolerant (flink going down)
 
@@ -53,3 +59,10 @@ To tackle this, append a random number to the ad id which is the partition key. 
 
 Stream processors like Flink also have a feature called checkpointing. This is where the processor periodically writes its state
 to a persistent storage like S3. If it goes down, it can read the last checkpoint and resume processing from where it left off. 
+
+Handling idempotency of clicks:
+The add service generates an impression id (signed for security) for each add placement and sends 
+it to the browser, when the user clicks on the add, the browser sends the impression ID along with 
+the click data. The Click Processor verifies the signature of the impression ID. 
+The Click Processor checks if the impression ID exists in a cache. If it does, then it's a duplicate,
+ and we ignore it. If it doesn't, then we write to the stream first, then add the impression ID to the cache

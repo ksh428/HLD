@@ -38,6 +38,10 @@ Data flow:
 
 HLD:
 
+robots.txt is a file that websites use to communicate with web crawlers. 
+It tells crawlers which pages they are allowed to crawl and which pages they are not. 
+It also tells crawlers how frequently they can crawl the site
+
 The frontier queue can be kafka/Amazon SQS
 
 
